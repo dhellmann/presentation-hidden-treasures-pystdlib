@@ -3,6 +3,7 @@
 """Load a custom object from JSON serlized version.
 """
 
+import hmac
 import json
 
 def dict_to_object(d):
@@ -11,6 +12,10 @@ def dict_to_object(d):
     if '__class__' in d:
         class_name = d.pop('__class__')
         module_name = d.pop('__module__')
+        signature = d.pop('__signature__')
+        expected_signature = hmac.new('PyCon2011', module_name + class_name).hexdigest()
+        if signature != expected_signature:
+            raise ValueError('Invalid signature for serialized object %s' % d)
         print 'Loading "%s" from "%s"' % (class_name, module_name)
         module = __import__(module_name)
         class_ = getattr(module, class_name)
@@ -24,6 +29,7 @@ def dict_to_object(d):
 
 encoded_object = '''
     [{"s": "instance value goes here",
+      "__signature__": "426f662f9fe3b3533d9ce7f9dcf8af77",
       "__module__": "json_myobj", "__class__": "MyObj"}]
     '''
 
