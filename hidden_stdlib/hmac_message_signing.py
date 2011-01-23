@@ -30,5 +30,6 @@ computed_signature = digest_maker.hexdigest()
 if computed_signature == read_signature:
     print '  Valid message, processed'
 else:
-    print '  Invalid message, discarded'
+    raise ValueError('Invalid message, discarded')
+
     
