@@ -9,13 +9,14 @@ class ExpressionCounter(object):
 
     def __init__(self):
         self.count = 0
-        self.previous_value = self
+        self.history = []
 
     def __call__(self, value):
-        if value != self.previous_value:
+        if not self.history or value != self.history[-1]:
             self.count += 1
             sys.ps1 = '(%d)> ' % self.count
-        self.previous_value = value
+            self.history.append(value)
         sys.__displayhook__(value)
 
+print 'installing expression counter'
 sys.displayhook = ExpressionCounter()
