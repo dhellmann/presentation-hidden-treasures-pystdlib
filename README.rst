@@ -7,3 +7,4 @@ This package contains the source code for the examples from the PyCon
 
 
 .. _Hidden Treasures of the Standard Library: http://us.pycon.org/2011/proposal/251/
+
