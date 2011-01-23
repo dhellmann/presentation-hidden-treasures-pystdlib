@@ -15,7 +15,7 @@ def dict_to_object(d):
         signature = d.pop('__signature__')
         expected_signature = hmac.new('PyCon2011', module_name + class_name).hexdigest()
         if signature != expected_signature:
-            raise ValueError('Invalid signature for serialized object %s' % d)
+            raise ValueError('Invalid signature for serialized object')
         print 'Loading "%s" from "%s"' % (class_name, module_name)
         module = __import__(module_name)
         class_ = getattr(module, class_name)
@@ -27,12 +27,23 @@ def dict_to_object(d):
         inst = d
     return inst
 
-encoded_object = '''
+for encoded_object in [
+    '''
     [{"s": "instance value goes here",
       "__signature__": "426f662f9fe3b3533d9ce7f9dcf8af77",
       "__module__": "json_myobj", "__class__": "MyObj"}]
+    ''',
+    # careful!
     '''
-
-myobj_instance = json.loads(encoded_object,
-                            object_hook=dict_to_object)
-print myobj_instance
+    [{"path": "/etc/passwd",
+      "__signature__": "426f662f9fe3b3533d9ce7f9dcf8af77",
+      "__module__": "os", "__class__": "unlink"}]
+    ''',
+    ]:
+    try:
+        myobj_instance = json.loads(encoded_object,
+                                    object_hook=dict_to_object)
+        print myobj_instance
+    except Exception as err:
+        print 'ERROR:', err
+    print
