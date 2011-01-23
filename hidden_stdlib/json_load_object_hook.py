@@ -10,12 +10,16 @@ def dict_to_object(d):
     """Convert dictionaries containing object properties to custom objects.
     """
     if '__class__' in d:
+        # find the values needed to convert the object
         class_name = d.pop('__class__')
         module_name = d.pop('__module__')
+
+        # make sure the contents haven't been tampered with
         signature = d.pop('__signature__')
         expected_signature = hmac.new('PyCon2011', module_name + class_name).hexdigest()
         if signature != expected_signature:
             raise ValueError('Invalid signature for serialized object')
+        
         print 'Loading "%s" from "%s"' % (class_name, module_name)
         module = __import__(module_name)
         class_ = getattr(module, class_name)
@@ -23,7 +27,9 @@ def dict_to_object(d):
                      for key, value in d.items())
         print 'Instantiating with', args
         inst = class_(**args)
+        
     else:
+        # not an object definition, return the dictionary
         inst = d
     return inst
 
@@ -33,6 +39,7 @@ for encoded_object in [
       "__signature__": "426f662f9fe3b3533d9ce7f9dcf8af77",
       "__module__": "json_myobj", "__class__": "MyObj"}]
     ''',
+    
     # careful!
     '''
     [{"path": "/etc/passwd",
