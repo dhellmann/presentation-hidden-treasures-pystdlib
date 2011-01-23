@@ -10,4 +10,9 @@ def quiet_errors(exc_type, exc_value, traceback):
 
 sys.excepthook = quiet_errors
 
-raise RuntimeError('Error message goes here')
+def main():
+    # do some work
+    raise RuntimeError('Error message goes here')
+
+if __name__ == '__main__':
+    main()
