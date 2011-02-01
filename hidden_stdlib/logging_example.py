@@ -17,7 +17,7 @@ root_logger.setLevel(logging.DEBUG)
 # Set up console output to stderr
 console = logging.StreamHandler(sys.stderr)
 console.setFormatter(logging.Formatter(console_format))
-console.setLevel(logging.INFO)
+console.setLevel(logging.INFO) # TODO: command line switch
 root_logger.addHandler(console)
 
 # Include debug messages when logging to a file
@@ -39,9 +39,9 @@ log = logging.getLogger(__name__)
 log.info('on the console and in the file')
 log.debug('only in the file')
 
-# Error handling takes two loggers
+# Send exceptions to the separate logger
 try:
     raise RuntimeError('failure message')
 except Exception as err:
-    log.error(err)
+    log.error(err) # for console output
     exception_log.exception(err)
