@@ -29,10 +29,10 @@ file_handler.setLevel(logging.DEBUG)
 root_logger.addHandler(file_handler)
 
 # Tracebacks should only go to the file
-exception_log = logging.getLogger('exceptions')
-exception_log.propagate = False
-exception_log.setLevel(logging.ERROR)
-exception_log.addHandler(file_handler)
+traceback_log = logging.getLogger('tracebacks')
+traceback_log.propagate = False
+traceback_log.setLevel(logging.ERROR)
+traceback_log.addHandler(file_handler)
 
 # Let the app or its libraries log messages with different levels
 log = logging.getLogger(__name__)
@@ -44,4 +44,4 @@ try:
     raise RuntimeError('failure message')
 except Exception as err:
     log.error(err) # for console output
-    exception_log.exception(err)
+    traceback_log.exception(err)
