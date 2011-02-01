@@ -17,7 +17,7 @@ signature = digest_maker.hexdigest()
 # Simulate sending a corrupted version of the message
 buffer = StringIO('%s\n%d\n%s' % (signature,
                                   len(encoded_message),
-                                  encoded_message
+                                  pickle.dumps(message[::-1]),
                                   ))
 
 # "Receive" the message
