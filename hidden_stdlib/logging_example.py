@@ -7,12 +7,16 @@ import logging
 import logging.handlers
 import sys
 
+console_format = '%(message)s'
+file_format = '%(asctime)s %(levelname)6s %(name)s %(message)s'
+
+# Log verbosely
 root_logger = logging.getLogger('')
 root_logger.setLevel(logging.DEBUG)
 
 # Set up console output to stderr
 console = logging.StreamHandler(sys.stderr)
-console.setFormatter(logging.Formatter('%(message)s'))
+console.setFormatter(logging.Formatter(console_format))
 console.setLevel(logging.INFO)
 root_logger.addHandler(console)
 
@@ -20,13 +24,24 @@ root_logger.addHandler(console)
 file_handler = logging.handlers.RotatingFileHandler(
     'logging_example.log', # use a full path
     )
-file_handler.setFormatter(
-    logging.Formatter('%(asctime)s %(levelname)6s %(name)s %(message)s')
-    )
+file_handler.setFormatter(logging.Formatter(file_format))
 file_handler.setLevel(logging.DEBUG)
 root_logger.addHandler(file_handler)
 
-# Let the app or its libraries log messages of different levels
+# Tracebacks should only go to the file
+exception_log = logging.getLogger('exceptions')
+exception_log.propagate = False
+exception_log.setLevel(logging.ERROR)
+exception_log.addHandler(file_handler)
+
+# Let the app or its libraries log messages with different levels
 log = logging.getLogger(__name__)
-log.info('this message appears on the console and in the file')
-log.debug('this message is only in the file')
+log.info('on the console and in the file')
+log.debug('only in the file')
+
+# Error handling takes two loggers
+try:
+    raise RuntimeError('failure message')
+except Exception as err:
+    log.error(err)
+    exception_log.exception(err)
