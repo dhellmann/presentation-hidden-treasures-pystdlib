@@ -4,3 +4,4 @@ hidden_stdlib.egg-info
 syntax: glob
 *.pyc
 *.db
+*.log
