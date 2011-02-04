@@ -29,7 +29,7 @@ candidates = [
     ]
 
 for candidate in candidates:
-    print '{:25}'.format(candidate),
+    print '{0:25}'.format(candidate),
     match = address.search(candidate)
     if match:
         print 'MATCH     ', match.groups()
