@@ -1,15 +1,14 @@
 #!/usr/bin/env python
 # encoding: utf-8
-"""Quoting command line argument parts to build shell commands.
+"""Quoting command line arguments to build shell commands.
 """
 
 import pipes
 
-cmd = ' '.join(pipes.quote(a)
-               for a in [ 'ls', 'hidden stdlib', '"already quoted"',
-                          "with ' embedded", ])
-print cmd
+raw = [ 'ls', 'with space', 
+        '"already quoted"',
+        "with ' embedded", ]
+print 'RAW  :', ' '.join(raw)
 
-    
-
-
+cmd = ' '.join(pipes.quote(a) for a in raw)
+print 'QUOTE:', cmd
