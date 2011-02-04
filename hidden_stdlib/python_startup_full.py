@@ -22,8 +22,13 @@ if os.path.exists(history_filename):
     print 'Loading history from %s' % history_filename
     readline.read_history_file(history_filename)
 
-# Use this to save the history:
-# readline.write_history_file(history_filename)
+# Save history on interpreter exit
+import atexit
+def save_history(history_filename=history_filename):
+    print 'Saving history to %s' % history_filename
+    import readline
+    readline.write_history_file(history_filename)
+atexit.register(save_history)
 
 # Clean up names
-del os, rlcompleter, save_history, history_filename
+del os, readline, rlcompleter, save_history, history_filename, atexit
