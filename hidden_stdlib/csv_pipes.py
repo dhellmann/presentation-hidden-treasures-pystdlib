@@ -2,7 +2,6 @@
 # encoding: utf-8
 """Pipe-delimited dialect for parsing sqlite3 output
 """
-#end_pymotw_header
 
 import csv
 import sys
