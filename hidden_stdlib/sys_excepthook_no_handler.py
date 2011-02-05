@@ -3,12 +3,9 @@
 """Demonstrate default error handler.
 """
 
-import sys
-
 def main():
     # do some work
-    raise RuntimeError('Error message goes here')
+    raise RuntimeError('Helpful error message')
 
 if __name__ == '__main__':
     main()
-    

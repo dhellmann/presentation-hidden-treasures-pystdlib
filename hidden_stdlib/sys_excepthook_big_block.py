@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # encoding: utf-8
-"""Demonstrate default error handler.
+"""Using try:except to handle errors
 """
 
 import sys
@@ -8,9 +8,9 @@ import sys
 def main():
     try:
         # do some work
-        raise RuntimeError('Error message goes here')
+        raise RuntimeError('Helpful error message')
     except Exception as err:
-        sys.stderr.write('ERROR: %s\n', err)
+        sys.stderr.write('ERROR: %s\n' % err)
 
 if __name__ == '__main__':
     main()
