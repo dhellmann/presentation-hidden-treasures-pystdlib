@@ -27,9 +27,14 @@ file_handler.setFormatter(logging.Formatter(file_format))
 file_handler.setLevel(logging.DEBUG)
 root_logger.addHandler(file_handler)
 
-log = logging.getLogger(__name__)
+# Tracebacks should only go to the file
+traceback_log = logging.getLogger('traceback')
+traceback_log.propagate = False
+traceback_log.setLevel(logging.ERROR)
+traceback_log.addHandler(file_handler)
 
 # Log sample messages with different levels
+log = logging.getLogger(__name__)
 log.info('on the console and in the file')
 log.debug('only in the file')
 
@@ -37,4 +42,5 @@ log.debug('only in the file')
 try:
     raise RuntimeError('failure message')
 except Exception as err:
-    log.error(err)
+    log.error(err) # for console output
+    traceback_log.exception(err)
