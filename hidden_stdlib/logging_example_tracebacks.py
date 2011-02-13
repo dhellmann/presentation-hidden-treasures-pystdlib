@@ -19,13 +19,19 @@ console.setLevel(logging.INFO) # TODO: command line switch
 root_logger.addHandler(console)
 
 # Include debug messages when logging to a file
-file_format = '%(asctime)s %(levelname)6s %(name)s %(message)s'
 file_handler = logging.handlers.RotatingFileHandler(
     'logging_example.log', # use a full path
     )
+file_format = '%(asctime)s %(levelname)6s %(name)s %(message)s'
 file_handler.setFormatter(logging.Formatter(file_format))
 file_handler.setLevel(logging.DEBUG)
 root_logger.addHandler(file_handler)
+
+# Log sample messages with different levels
+log = logging.getLogger(__name__)
+log.info('on the console and in the file')
+log.debug('only in the file')
+log.error('simple error message')
 
 # Tracebacks should only go to the file
 traceback_log = logging.getLogger('traceback')
@@ -33,14 +39,14 @@ traceback_log.propagate = False
 traceback_log.setLevel(logging.ERROR)
 traceback_log.addHandler(file_handler)
 
-# Log sample messages with different levels
-log = logging.getLogger(__name__)
-log.info('on the console and in the file')
-log.debug('only in the file')
+# Replace excepthook with logger
+def log_exception(exc_type, exc_value, traceback):
+    logging.getLogger(__name__).error(exc_value)
+    logging.getLogger('traceback').error(
+        exc_value,
+        exc_info=(exc_type, exc_value, traceback),
+        )
+sys.excepthook = log_exception
 
-# Send exceptions to the separate logger
-try:
-    raise RuntimeError('failure message')
-except Exception as err:
-    log.error(err) # for console output
-    traceback_log.exception(err)
+# Send exceptions to the logger automatically
+raise RuntimeError('failure message')
