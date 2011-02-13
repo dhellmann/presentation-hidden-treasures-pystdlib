@@ -3,6 +3,7 @@
 """Signing and verifying messages with hmac
 """
 
+import hashlib
 import hmac
 from cStringIO import StringIO
 import pickle
@@ -13,6 +14,10 @@ encoded_message = pickle.dumps(message)
 digest_maker = hmac.new('shared-secret-value')
 digest_maker.update(encoded_message)
 signature = digest_maker.hexdigest()
+checksum = hashlib.md5(encoded_message).hexdigest()
+
+print 'Checksum          :', checksum
+print 'Outgoing signature:', signature
 
 # Simulate sending the message
 buffer = StringIO('%s\n%d\n%s' % (signature,
@@ -29,9 +34,10 @@ read_message = buffer.read(message_len)
 digest_maker = hmac.new('shared-secret-value',
                         read_message)
 computed_signature = digest_maker.hexdigest()
+print 'Computed signature:', signature
 
 if computed_signature == read_signature:
-    print 'Valid message, processed'
+    print '\nValid message, processed'
     safe_message = pickle.loads(read_message)
     print 'Message:', safe_message
 else:
