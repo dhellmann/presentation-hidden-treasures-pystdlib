@@ -14,9 +14,7 @@ encoded_message = pickle.dumps(message)
 digest_maker = hmac.new('shared-secret-value')
 digest_maker.update(encoded_message)
 signature = digest_maker.hexdigest()
-checksum = hashlib.md5(encoded_message).hexdigest()
 
-print 'Checksum          :', checksum
 print 'Outgoing signature:', signature
 
 # Simulate sending the message
